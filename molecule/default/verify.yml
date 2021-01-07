@@ -1,0 +1,12 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Confirm duologsync service is running
+      command: "/opt/duologsync/duologsync.venv/bin/duologsync -h"
+      register: duologsync_test
+      changed_when: false
+      failed_when: duologsync_test.rc != 0

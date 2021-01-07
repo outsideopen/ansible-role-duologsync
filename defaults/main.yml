@@ -1,0 +1,30 @@
+---
+duologsync_path: /opt/duologsync
+duologsync_systemd_path: /etc/systemd/system
+
+duologsync_install_os_dependencies: true
+duologsync_install_setuptools: true
+duologsync_update_apt_cache: true
+
+duologsync_repo_url: https://github.com/duosecurity/duo_log_sync/
+
+duologsync_user: duologsync
+duologsync_group: duologsync
+
+#
+# https://github.com/duosecurity/duo_log_sync/blob/master/template_config.yml
+#
+duologsync_log_format: JSON
+duologsync_integration_key: changeme
+duologsync_private_key: changeme
+duologsync_api_hostname: changeme
+duologsync_account_is_msp: false
+
+### Example
+# duologsync_servers:
+#  - id: graylog
+#    hostname: graylog.example.com
+#    port: 5151
+#    protocol: UDP
+#    endpoints:
+duologsync_servers: {}

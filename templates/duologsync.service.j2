@@ -1,0 +1,14 @@
+[Unit]
+Description=Duo Log Sync
+After=network.target
+
+[Service]
+Type=simple
+User={{ duologsync_user }}
+Group={{ duologsync_group }}
+WorkingDirectory={{ duologsync_path }}
+ExecStart={{ duologsync_path }}/duologsync.venv/bin/duologsync {{ duologsync_path }}/config.yml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

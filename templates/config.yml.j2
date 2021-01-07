@@ -1,0 +1,32 @@
+# {{ ansible_managed }}
+version: '1.0.0'
+
+dls_settings:
+  log_filepath: '{{ duologsync_path }}/shared/logs/duologsync.log'
+  log_format: '{{ duologsync_log_format }}'
+  checkpointing:
+    directory: '{{ duologsync_path }}/shared/checkpoints'
+
+account:
+  ikey: '{{ duologsync_integration_key | mandatory }}'
+  skey: '{{ duologsync_private_key | mandatory }}'
+  hostname: '{{ duologsync_api_hostname | mandatory }}'
+  is_msp: {{ duologsync_account_is_msp | ternary('True', 'False') }}
+{% if duologsync_servers|length > 0 %}
+  endpoint_server_mappings:
+{% for server in duologsync_servers %}
+    - endpoints: ['{{ server.endpoints | join("','") }}']
+      server: '{{ server.id }}'
+{%- endfor %}
+
+servers:
+{% for server in duologsync_servers %}
+  - id: '{{ server.id }}'
+    hostname: '{{ server.hostname }}'
+    port: {{ server.port }}
+    protocol: '{{ server.protocol | default("UDP") }}'
+    {% if 'certpath' in server %}
+    cert_filepath: "{{ server.cert_filepath }}"
+    {% endif %}
+{% endfor %}
+{% endif %}

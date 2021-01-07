@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    duologsync_servers:
+      - id: graylog
+        hostname: graylog.example.com
+        port: 5151
+        protocol: UDP
+        endpoints:
+          - adminaction
+          - auth
+          - telephony
+  tasks:
+    - name: Include duologsync
+      include_role:
+        name: dlundgren.duologsync

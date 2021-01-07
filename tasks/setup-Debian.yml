@@ -1,0 +1,10 @@
+---
+- name: Install dependencies (Debian/Ubuntu)
+  when: duologsync_install_os_dependencies
+  apt:
+    name:
+      - git
+      - python3-virtualenv
+      - python3-venv
+    state: present
+    update_cache: "{{ duologsync_update_apt_cache }}"
