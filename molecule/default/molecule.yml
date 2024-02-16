@@ -6,13 +6,14 @@ driver:
 platforms:
   - name: instance
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2204}-ansible:latest"
+    privileged: true
+    pre_build_image: true
+    cgroupns_mode: host
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    tmpfs:
-      - /tmp
-    privileged: true
-    pre_build_image: true
+      - /run
+      - /run/lock
 provisioner:
   name: ansible
   config_options:
