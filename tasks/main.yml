@@ -71,6 +71,7 @@
     - name: Run duologsync python setup
       when: duologsync_clone.after != duologsync_clone.before
       ansible.builtin.command: "{{ duologsync_path }}/venv-run.sh python3 setup.py install"
+      changed_when: false
       args:
         chdir: "{{ duologsync_path }}/duologsync"
 
