@@ -15,7 +15,7 @@
 - name: Install duologsync
   become: true
   become_user: "{{ duologsync_user }}"
-  ansible.builtin.block:
+  block:
     - name: Ensure paths exist
       ansible.builtin.file:
         path: "{{ duologsync_path }}/{{ item }}"
