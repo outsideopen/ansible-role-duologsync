@@ -13,5 +13,5 @@
           - telephony
   tasks:
     - name: Include duologsync
-      include_role:
+      ansible.builtin.include_role:
         name: outsideopen.duologsync

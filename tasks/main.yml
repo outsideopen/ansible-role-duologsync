@@ -1,13 +1,13 @@
 ---
 - name: Setup OS for DUO logsync
-  include_tasks: "setup-{{ ansible_os_family }}.yml"
+  ansible.builtin.include_tasks: "setup-{{ ansible_os_family }}.yml"
 
 - name: Ensure group exists
-  group:
+  ansible.builtin.group:
     name: "{{ duologsync_group }}"
 
 - name: Ensure user exists
-  user:
+  ansible.builtin.user:
     name: "{{ duologsync_user }}"
     group: "{{ duologsync_group }}"
     home: "{{ duologsync_path }}"
@@ -15,17 +15,18 @@
 - name: Install duologsync
   become: true
   become_user: "{{ duologsync_user }}"
-  block:
-    - name: Ensure the log paths exist
-      file:
+  ansible.builtin.block:
+    - name: Ensure paths exist
+      ansible.builtin.file:
         path: "{{ duologsync_path }}/{{ item }}"
         state: directory
         mode: "0755"
       loop:
         - shared/logs
+        - shared/checkpoints
 
     - name: Clone duo_log_sync repository
-      git:
+      ansible.builtin.git:
         repo: "{{ duologsync_repo_url }}"
         dest: "{{ duologsync_path }}/duologsync"
         version: master
@@ -33,57 +34,55 @@
         update: true
       register: duologsync_clone
 
-    - name: Create virtual env
-      block:
-        - name: Create virtualenv
-          command: "python3 -m venv {{ duologsync_path }}/duologsync.venv"
-          args:
-            chdir: "{{ duologsync_path }}"
-            creates: "{{ duologsync_path }}/duologsync.venv"
+    - name: Create virtualenv
+      ansible.builtin.command: "python3 -m venv {{ duologsync_path }}/duologsync.venv"
+      args:
+        chdir: "{{ duologsync_path }}"
+        creates: "{{ duologsync_path }}/duologsync.venv"
 
     - name: Install setuptools
       when:
         - duologsync_install_setuptools
         - duologsync_clone.after != duologsync_clone.before
-      pip:
+      ansible.builtin.pip:
         chdir: "{{ duologsync_path }}/duologsync"
         name: setuptools
         virtualenv: "{{ duologsync_path }}/duologsync.venv"
 
     - name: Install duologsync requirements
       when: duologsync_clone.after != duologsync_clone.before
-      pip:
+      ansible.builtin.pip:
         chdir: "{{ duologsync_path }}/duologsync"
         requirements: "{{ duologsync_path }}/duologsync/requirements.txt"
         virtualenv: "{{ duologsync_path }}/duologsync.venv"
 
     - name: Configure duologsync
-      template:
+      ansible.builtin.template:
         src: config.yml.j2
         dest: "{{ duologsync_path }}/config.yml"
         mode: 0600
 
     - name: Setup venv wrapper script
-      template:
+      ansible.builtin.template:
         src: venv-run.sh.j2
         dest: "{{ duologsync_path }}/venv-run.sh"
         mode: 0755
 
     - name: Run duologsync python setup
       when: duologsync_clone.after != duologsync_clone.before
-      command: "{{ duologsync_path }}/venv-run.sh python3 setup.py install"
+      ansible.builtin.command: "{{ duologsync_path }}/venv-run.sh python3 setup.py install"
       args:
         chdir: "{{ duologsync_path }}/duologsync"
 
 - name: Setup systemd service
-  template:
+  ansible.builtin.template:
     src: duologsync.service.j2
     dest: "{{ duologsync_systemd_path }}/duologsync.service"
     mode: "0644"
   register: duologsync_config_change
 
 - name: Start duologsync
-  systemd:
+  ansible.builtin.systemd:
     name: duologsync
     state: started
     enabled: true

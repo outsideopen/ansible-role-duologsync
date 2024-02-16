@@ -1,5 +1,5 @@
 ---
 - name: Restart duologsync
-  systemd:
+  ansible.builtin.systemd:
     name: duologsync
     state: started

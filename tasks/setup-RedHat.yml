@@ -1,7 +1,7 @@
 ---
 - name: Install dependencies (RedHat)
   when: duologsync_install_os_dependencies
-  package:
+  ansible.builtin.package:
     name:
       - git
       - python3-virtualenv

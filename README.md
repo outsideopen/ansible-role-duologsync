@@ -22,7 +22,7 @@ Installs Duo log sync package for Python.
 
 ### duologsync_servers
 
-The valid endpoints are defined the duo_log_sync [template_config.yml](https://github.com/duosecurity/duo_log_sync/blob/master/template_config.yml#L120) file.
+The valid endpoints are defined in the duo_log_sync [template_config.yml](https://github.com/duosecurity/duo_log_sync/blob/master/template_config.yml#L120) file.
 
 Note: the `duologsync_log_format` is a global option, so set up the servers according to using `CEF` or `JSON`.
 
@@ -44,7 +44,7 @@ duologsync_servers:
 Testing requires Molecule and Docker
 
 ```
-pip3 install -r requirements.txt
+pip3 install -r molecule/requirements.txt
 molecule test
 ```
 

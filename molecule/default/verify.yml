@@ -6,7 +6,7 @@
   gather_facts: false
   tasks:
     - name: Confirm duologsync service is running
-      command: "/opt/duologsync/duologsync.venv/bin/duologsync -h"
+      ansible.builtin.command: "/opt/duologsync/duologsync.venv/bin/duologsync -h"
       register: duologsync_test
       changed_when: false
       failed_when: duologsync_test.rc != 0
