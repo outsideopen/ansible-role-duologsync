@@ -1,7 +1,6 @@
 ---
 name: Release to Ansible Galaxy
-
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
   release:
     types: [published]
