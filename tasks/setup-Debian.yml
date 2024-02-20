@@ -1,7 +1,7 @@
 ---
 - name: Install dependencies (Debian/Ubuntu)
   when: duologsync_install_os_dependencies
-  apt:
+  ansible.builtin.apt:
     name:
       - git
       - python3-virtualenv

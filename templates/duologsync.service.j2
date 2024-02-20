@@ -8,7 +8,8 @@ User={{ duologsync_user }}
 Group={{ duologsync_group }}
 WorkingDirectory={{ duologsync_path }}
 ExecStart={{ duologsync_path }}/duologsync.venv/bin/duologsync {{ duologsync_path }}/config.yml
-Restart=on-failure
+Restart=always
+RestartSec=30
 
 [Install]
 WantedBy=multi-user.target

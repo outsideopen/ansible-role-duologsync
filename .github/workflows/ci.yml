@@ -1,6 +1,6 @@
 ---
 name: CI
-'on':
+on:  # yamllint disable-line rule:truthy
   pull_request:
   push:
     branches:
@@ -11,18 +11,17 @@ defaults:
     working-directory: 'outsideopen.duologsync'
 
 jobs:
-
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: 'outsideopen.duologsync'
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -40,24 +39,22 @@ jobs:
     strategy:
       matrix:
         include:
-          - distro: centos7
-            playbook: converge.yml
           - distro: centos8
-            playbook: converge.yml
-          - distro: ubuntu1804
             playbook: converge.yml
           - distro: ubuntu2004
             playbook: converge.yml
-          - distro: debian10
+          - distro: ubuntu2204
+            playbook: converge.yml
+          - distro: debian11
             playbook: converge.yml
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: 'outsideopen.duologsync'
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -71,18 +68,3 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
           MOLECULE_PLAYBOOK: ${{ matrix.playbook }}
-
-  slack:
-    name: Slack
-    needs: molecule
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - uses: technote-space/workflow-conclusion-action@v2
-      - uses: 8398a7/action-slack@v3
-        with:
-          author_name: Molecule tests
-          status: ${{ env.WORKFLOW_CONCLUSION }} # neutral, success, skipped, cancelled, timed_out, action_required, failure
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
