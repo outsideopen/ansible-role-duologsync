@@ -15,6 +15,7 @@ jobs:
       - name: galaxy
         uses: robertdebock/galaxy-action@1.0.1
         with:
+          galaxy_version: ${{ github.ref_name }}
           galaxy_api_key: ${{ secrets.galaxy_api_key }}
   slack:
     name: Slack
