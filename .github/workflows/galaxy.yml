@@ -12,4 +12,5 @@ jobs:
       - name: publish to galaxy
         uses: ansible-actions/ansible-galaxy-action@v1.2.0
         with:
+          galaxy_version: ${{ github.ref_name }}
           galaxy_api_key: ${{ secrets.galaxy_api_key }}
