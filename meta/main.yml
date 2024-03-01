@@ -3,7 +3,6 @@ dependencies: []
 galaxy_info:
   namespace: outsideopen
   role_name: duologsync
-  standalone: true
   author: David Lundgren
   company: Outside Open
   description: Installs Duo log sync
